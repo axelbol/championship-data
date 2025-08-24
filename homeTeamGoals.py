@@ -12,7 +12,7 @@ def scrape_home_goals(url):
     """
     try:
         r = requests.get(url)
-        r.raise_for_status()  # Raise an exception for bad status codes
+        # r.raise_for_status()  # Raise an exception for bad status codes
 
         soup = bs(r.content, 'html.parser')
 
@@ -122,9 +122,9 @@ def main():
         df = save_goals_to_csv(goal_scorers, url_input, csv_filename)
 
         # Display current season summary
-        print(f"\nSeason Summary:")
-        print(f"Total goals: {len(df[df['goal_scorer'] != 'No goals'])}")
-        print(f"Total matches: {len(df['match_url'].unique())}")
+        # print(f"\nSeason Summary:")
+        # print(f"Total goals: {len(df[df['goal_scorer'] != 'No goals'])}")
+        # print(f"Total matches: {len(df['match_url'].unique())}")
 
         # Show top scorers
         if len(df[df['goal_scorer'] != 'No goals']) > 0:
