@@ -97,7 +97,7 @@ def main():
     print("FotMob Home Team Goals Scraper")
     print("=" * 40)
 
-    csv_filename = '/home/axel/Code/Python/championship/csv/listGoalsPlayers.csv'
+    csv_filename = '/home/axel/Code/Python/championship/csv/listPlayers.csv'
 
     while True:
         # Get URL input from user
