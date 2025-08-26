@@ -69,19 +69,19 @@ def save_goals_to_csv(goal_scorers, match_url, csv_filename):
 
     df_current = pd.DataFrame(current_match_data)
 
-
+    # Code to append to existing CSV
     # Check if CSV file exists
-    # if os.path.exists(csv_filename):
-    #     # Load existing data and append new data
-    #     df_existing = pd.read_csv(csv_filename)
-    #     df_combined = pd.concat([df_existing, df_current], ignore_index=True)
-    # else:
-    #     # Create new DataFrame
-    #     df_combined = df_current
-
-
+    '''
+    if os.path.exists(csv_filename):
+        # Load existing data and append new data
+        df_existing = pd.read_csv(csv_filename)
+        df_combined = pd.concat([df_existing, df_current], ignore_index=True)
+    else:
+        # Create new DataFrame
+        df_combined = df_current
+    '''
+    # Code to rewrite CSV file
     df_combined = df_current
-
 
     # Save to CSV
     df_combined.to_csv(csv_filename, index=False)
@@ -97,7 +97,7 @@ def main():
     print("FotMob Home Team Goals Scraper")
     print("=" * 40)
 
-    csv_filename = '/home/axel/Code/Python/championship/csv/test9.csv'
+    csv_filename = '/home/axel/Code/Python/championship/csv/listGoalsPlayers.csv'
 
     while True:
         # Get URL input from user

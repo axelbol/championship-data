@@ -85,12 +85,20 @@ def process_goal_scorers_csv(csv_file_path, url, output_csv_path, goal_scorer_co
     if all_dataframes:
         final_df = pd.concat(all_dataframes, ignore_index=True)
 
-        # Save to new CSV file
+        # Append to existing CSV file or create new one if it doesn't exist
         try:
-            final_df.to_csv(output_csv_path, index=False)
-            print(f"Data saved successfully to {output_csv_path}")
-            print(f"Final dataset shape: {final_df.shape}")
-            print(f"Columns in final dataset: {list(final_df.columns)}")
+            # Check if file exists
+            import os
+            if os.path.exists(output_csv_path):
+                # File exists, append without header
+                final_df.to_csv(output_csv_path, mode='a', header=False, index=False)
+                print(f"Data appended successfully to {output_csv_path}")
+                print(f"Final dataset shape: {final_df.shape}")
+            else:
+                # File doesn't exist, create new with header
+                final_df.to_csv(output_csv_path, index=False)
+                print(f"New file created and data saved to {output_csv_path}")
+                print(f"Final dataset shape: {final_df.shape}")
         except Exception as e:
             print(f"Error saving CSV file: {str(e)}")
     else:
@@ -99,16 +107,16 @@ def process_goal_scorers_csv(csv_file_path, url, output_csv_path, goal_scorer_co
 # Example usage
 if __name__ == "__main__":
     # Configuration
-    input_csv_file = "your_input_file.csv"  # Replace with your CSV file path
-    output_csv_file = "goal_scorer_data.csv"  # Output file name
-    target_url = "https://www.fotmob.com/es/matches/liverpool-vs-newcastle/2ygyxm#4813393"  # Replace with your target URL
+    input_csv_file = "/home/axel/Code/Python/championship/csv/listGoalsPlayers.csv"  # Replace with your CSV file path
+    output_csv_file = "/home/axel/Code/Python/championship/csv/homeScorers.csv"  # Output file name
+    target_url = input('Enter URL match: ')
     column_name = "goal_scorer"  # Replace if your column has a different name
 
     # Process the data
     process_goal_scorers_csv(
-        csv_file_path='/home/axel/Code/Python/championship/csv/test9.csv',
+        csv_file_path='/home/axel/Code/Python/championship/csv/listGoalsPlayers.csv',
         url=target_url,
-        output_csv_path='/home/axel/Code/Python/championship/csv/test10.csv',
+        output_csv_path='/home/axel/Code/Python/championship/csv/homeScorers.csv',
         goal_scorer_column=column_name
     )
 
