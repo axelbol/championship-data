@@ -101,7 +101,7 @@ if __name__ == "__main__":
     # Configuration
     input_csv_file = "your_input_file.csv"  # Replace with your CSV file path
     output_csv_file = "goal_scorer_data.csv"  # Output file name
-    target_url = "https://www.fotmob.com/es/matches/liverpool-vs-afc-bournemouth/2he69q#4813374"  # Replace with your target URL
+    target_url = "https://www.fotmob.com/es/matches/liverpool-vs-newcastle/2ygyxm#4813393"  # Replace with your target URL
     column_name = "goal_scorer"  # Replace if your column has a different name
 
     # Process the data

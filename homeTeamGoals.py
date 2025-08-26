@@ -5,14 +5,13 @@ import pandas as pd
 import os
 from datetime import datetime
 
-def scrape_home_goals(url):
+def fetch_match_data(url):
     """
     Scrape home team goals from a FotMob match URL
     Returns a list of goal scorer names
     """
     try:
         r = requests.get(url)
-        # r.raise_for_status()  # Raise an exception for bad status codes
 
         soup = bs(r.content, 'html.parser')
 
@@ -116,7 +115,7 @@ def main():
         print("-" * 50)
 
         # Scrape goals from the match
-        goal_scorers = scrape_home_goals(url_input)
+        goal_scorers = fetch_match_data(url_input)
 
         # Save to CSV
         df = save_goals_to_csv(goal_scorers, url_input, csv_filename)
