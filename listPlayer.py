@@ -99,6 +99,18 @@ def main():
 
     csv_filename = '/home/axel/Code/Python/championship/csv/listPlayers.csv'
 
+
+    # new code
+    url_input = input('\nEnter FotMob match URL (or "quit" to exit): ').strip()
+    print(f"\nScraping match: {url_input}")
+    print("-" * 50)
+     # Scrape goals from the match
+    goal_scorers = fetch_match_data(url_input)
+    # Save to CSV
+    df = save_goals_to_csv(goal_scorers, url_input, csv_filename)
+    # end new code
+
+    '''
     while True:
         # Get URL input from user
         url_input = input('\nEnter FotMob match URL (or "quit" to exit): ').strip()
@@ -137,6 +149,7 @@ def main():
             break
 
     print(f"\nFinal data saved in: {csv_filename}")
+    '''
 
 if __name__ == "__main__":
     main()
