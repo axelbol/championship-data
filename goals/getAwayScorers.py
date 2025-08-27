@@ -8,7 +8,7 @@ from datetime import datetime
 
 def fetch_match_data(url):
     """
-    Scrape home team goals from a FotMob match URL
+    Scrape away team goals from a FotMob match URL
     Returns a list of goal scorer names
     """
     try:
@@ -23,15 +23,15 @@ def fetch_match_data(url):
 
         json_fotmob = json.loads(script_tag.contents[0])
 
-        # Navigate to home team goals
+        # Navigate to away team goals
         try:
-            home_goals_data = json_fotmob['props']['pageProps']['header']['events']['homeTeamGoals']
-            goal_scorers = list(home_goals_data.keys())
-            print(f"Home team goals found: {goal_scorers}")
+            away_goals_data = json_fotmob['props']['pageProps']['header']['events']['awayTeamGoals']
+            goal_scorers = list(away_goals_data.keys())
+            print(f"Away team goals found: {goal_scorers}")
             return goal_scorers
 
         except KeyError as e:
-            print(f"Could not find home team goals data. Key error: {e}")
+            print(f"Could not find away team goals data. Key error: {e}")
             print("This might be a 0-0 game or the data structure is different")
             return []
 
@@ -77,26 +77,26 @@ def save_goals_to_csv(goal_scorers, match_url, csv_filename):
 def scrape_goal_scorer_data(url, goal_scorer):
     """
     Scrape data for a specific goal scorer from the given URL
-    Returns tuple: (scorer_data, match_round, home_team_id)
+    Returns tuple: (scorer_data, match_round, away_team_id)
     """
     try:
         r = requests.get(url)
         soup = bs(r.content, 'html.parser')
         json_data = json.loads(soup.find('script', attrs={'id': '__NEXT_DATA__'}).contents[0])
 
-        # Get match round and home team ID
+        # Get match round and away team ID
         match_round = json_data['props']['pageProps']['general']['matchRound']
-        home_team_id = json_data['props']['pageProps']['general']['homeTeam']['id']
+        away_team_id = json_data['props']['pageProps']['general']['awayTeam']['id']
 
         # Navigate to the specific path and get data for the goal scorer
-        home_team_goals = json_data['props']['pageProps']['header']['events']['homeTeamGoals']
+        away_team_goals = json_data['props']['pageProps']['header']['events']['awayTeamGoals']
 
         # Check if the goal scorer exists in the data
-        if goal_scorer in home_team_goals:
-            return home_team_goals[goal_scorer], match_round, home_team_id
+        if goal_scorer in away_team_goals:
+            return away_team_goals[goal_scorer], match_round, away_team_id
         else:
             print(f"Goal scorer '{goal_scorer}' not found in data")
-            return None, match_round, home_team_id
+            return None, match_round, away_team_id
 
     except Exception as e:
         print(f"Error scraping data for {goal_scorer}: {str(e)}")
@@ -128,19 +128,19 @@ def process_goal_scorers_csv(csv_file_path, url, output_csv_path, goal_scorer_co
 
     # Variables to store match info (will be the same for all scorers from the same match)
     match_round = None
-    home_team_id = None
+    away_team_id = None
 
     # Process each goal scorer
     for scorer in goal_scorers:
         print(f"Processing: {scorer}")
 
         # Scrape data for this goal scorer
-        scorer_data, current_match_round, current_home_team_id = scrape_goal_scorer_data(url, scorer)
+        scorer_data, current_match_round, current_away_team_id = scrape_goal_scorer_data(url, scorer)
 
         # Store match info from the first successful scrape
         if match_round is None and current_match_round is not None:
             match_round = current_match_round
-            home_team_id = current_home_team_id
+            away_team_id = current_away_team_id
 
         if scorer_data is not None:
             # Convert the data to a DataFrame
@@ -154,7 +154,7 @@ def process_goal_scorers_csv(csv_file_path, url, output_csv_path, goal_scorer_co
             # Add columns to identify which goal scorer this data belongs to and match info
             scorer_df['goal_scorer'] = scorer
             scorer_df['matchRound'] = match_round
-            scorer_df['HomeTeamId'] = home_team_id
+            scorer_df['AwayTeamId'] = away_team_id
 
             # Add to our list of dataframes
             all_dataframes.append(scorer_df)
@@ -163,11 +163,11 @@ def process_goal_scorers_csv(csv_file_path, url, output_csv_path, goal_scorer_co
             time.sleep(0.5)
         else:
             # Even if no scorer data, we can still add a row with match info
-            if match_round is not None and home_team_id is not None:
+            if match_round is not None and away_team_id is not None:
                 scorer_df = pd.DataFrame({
                     'goal_scorer': [scorer],
                     'matchRound': [match_round],
-                    'HomeTeamId': [home_team_id]
+                    'AwayTeamId': [away_team_id]
                 })
                 all_dataframes.append(scorer_df)
             print(f"No data found for {scorer}")
@@ -187,7 +187,7 @@ def process_goal_scorers_csv(csv_file_path, url, output_csv_path, goal_scorer_co
 
             print(f"Final dataset shape: {final_df.shape}")
             print(f"Match Round: {match_round}")
-            print(f"Home Team ID: {home_team_id}")
+            print(f"Away Team ID: {away_team_id}")
 
         except Exception as e:
             print(f"Error saving CSV file: {str(e)}")
@@ -202,8 +202,8 @@ def main():
     print("=" * 50)
 
     # File paths
-    listplayers_csv = '/home/axel/Code/Python/championship/csv/listPlayers.csv'
-    homescorers_csv = '/home/axel/Code/Python/championship/csv/homeScorers.csv'
+    listawayplayers_csv = '/home/axel/Code/Python/championship/csv/listAwayPlayers.csv'
+    awayscorers_csv = '/home/axel/Code/Python/championship/csv/awayScorers.csv'
 
     # Get URL input from user
     url_input = input('\nEnter FotMob match URL: ').strip()
@@ -216,29 +216,29 @@ def main():
     print(f"Scraping match: {url_input}")
     print("-" * 50)
 
-    # Step 1: Scrape goals from the match and save to listPlayers.csv
+    # Step 1: Scrape goals from the match and save to listAwayPlayers.csv
     goal_scorers = fetch_match_data(url_input)
 
     if not goal_scorers:
         print("No goal scorers found. Exiting...")
         return
 
-    df_goals = save_goals_to_csv(goal_scorers, url_input, listplayers_csv)
+    df_goals = save_goals_to_csv(goal_scorers, url_input, listawayplayers_csv)
 
     print(f"\n=== STEP 2: Processing goal scorer details ===")
     print("-" * 50)
 
     # Step 2: Process the CSV file and get detailed data
     process_goal_scorers_csv(
-        csv_file_path=listplayers_csv,
+        csv_file_path=listawayplayers_csv,
         url=url_input,
-        output_csv_path=homescorers_csv,
+        output_csv_path=awayscorers_csv,
         goal_scorer_column='goal_scorer'
     )
 
     print(f"\n=== COMPLETED ===")
-    print(f"Goal scorers list saved to: {listplayers_csv}")
-    print(f"Detailed scorer data saved to: {homescorers_csv}")
+    print(f"Goal scorers list saved to: {listawayplayers_csv}")
+    print(f"Detailed scorer data saved to: {awayscorers_csv}")
 
 if __name__ == "__main__":
     main()
