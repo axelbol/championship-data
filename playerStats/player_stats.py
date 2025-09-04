@@ -48,6 +48,34 @@ def extract_match_name_from_url(url):
                 return part.split('#')[0]  # Remove any fragment
     return "match_data"  # Default fallback
 
+def get_unique_filename(directory, base_filename):
+    """
+    Generate a unique filename by adding a number suffix if the file already exists
+
+    Parameters:
+    - directory: The directory where the file will be saved
+    - base_filename: The original filename (e.g., 'liverpool-vs-arsenal.csv')
+
+    Returns:
+    - A unique filename that doesn't exist in the directory
+    """
+    # Split filename and extension
+    name, ext = os.path.splitext(base_filename)
+
+    # Check if original filename exists
+    full_path = os.path.join(directory, base_filename)
+    if not os.path.exists(full_path):
+        return base_filename
+
+    # If it exists, find the next available number
+    counter = 1
+    while True:
+        new_filename = f"{name}-{counter}{ext}"
+        new_full_path = os.path.join(directory, new_filename)
+        if not os.path.exists(new_full_path):
+            return new_filename
+        counter += 1
+
 def main():
     # Get URL input
     url_input = input('Enter URL: ')
@@ -168,19 +196,25 @@ def main():
 
     # Extract match name from URL and create CSV filename
     match_name = extract_match_name_from_url(url)
-    csv_filename = f"{match_name}.csv"
+    base_csv_filename = f"{match_name}.csv"
     csv_directory = "/home/axel/Code/Python/championship/playerStats/csv/"
 
     # Create directory if it doesn't exist
     os.makedirs(csv_directory, exist_ok=True)
 
-    # Full path for CSV file
-    csv_path = os.path.join(csv_directory, csv_filename)
+    # Get unique filename to prevent overwriting
+    unique_csv_filename = get_unique_filename(csv_directory, base_csv_filename)
+    csv_path = os.path.join(csv_directory, unique_csv_filename)
 
     # Save DataFrame to CSV
     df_players_T.to_csv(csv_path, index=False)
     print(f"\nDataFrame saved to: {csv_path}")
     print(f"Shape of saved DataFrame: {df_players_T.shape}")
+
+    # Show if filename was modified
+    if unique_csv_filename != base_csv_filename:
+        print(f"Note: Original filename '{base_csv_filename}' already existed.")
+        print(f"File saved with unique name: '{unique_csv_filename}'")
 
 if __name__ == "__main__":
     main()
