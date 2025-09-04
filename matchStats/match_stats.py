@@ -188,7 +188,7 @@ def scrape_and_save_match_data():
     df = pd.DataFrame([match_data])
 
     # Define the CSV filename
-    csv_filename = '/home/axel/Code/Python/championship/csv/fotmob_match_stats.csv'
+    csv_filename = '/home/axel/Code/Python/championship/matchStats/csv/fotmob_match_stats.csv'
 
     # Check if CSV file already exists
     if os.path.exists(csv_filename):

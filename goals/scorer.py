@@ -227,11 +227,11 @@ def process_team_data(url, team_type):
 
     # Define file paths based on team type
     if team_type == 'home':
-        list_players_csv = '/home/axel/Code/Python/championship/csv/listHomePlayers.csv'
-        scorers_csv = '/home/axel/Code/Python/championship/csv/homeScorers.csv'
+        list_players_csv = '/home/axel/Code/Python/championship/goals/csv/listHomePlayers.csv'
+        scorers_csv = '/home/axel/Code/Python/championship/goals/csv/homeScorers.csv'
     else:  # away
-        list_players_csv = '/home/axel/Code/Python/championship/csv/listAwayPlayers.csv'
-        scorers_csv = '/home/axel/Code/Python/championship/csv/awayScorers.csv'
+        list_players_csv = '/home/axel/Code/Python/championship/goals/csv/listAwayPlayers.csv'
+        scorers_csv = '/home/axel/Code/Python/championship/goals/csv/awayScorers.csv'
 
     print(f"Step 1: Scraping {team_type} team goal scorers")
     print("-" * 30)
@@ -285,10 +285,10 @@ def main():
     print("SCRAPING COMPLETED FOR BOTH TEAMS!")
     print("=" * 60)
     print("Files created/updated:")
-    print("- Home team goal scorers: /home/axel/Code/Python/championship/csv/listHomePlayers.csv")
-    print("- Home team detailed data: /home/axel/Code/Python/championship/csv/homeScorers.csv")
-    print("- Away team goal scorers: /home/axel/Code/Python/championship/csv/listAwayPlayers.csv")
-    print("- Away team detailed data: /home/axel/Code/Python/championship/csv/awayScorers.csv")
+    print("- Home team goal scorers: /home/axel/Code/Python/championship/goals/csv/listHomePlayers.csv")
+    print("- Home team detailed data: /home/axel/Code/Python/championship/goals/csv/homeScorers.csv")
+    print("- Away team goal scorers: /home/axel/Code/Python/championship/goals/csv/listAwayPlayers.csv")
+    print("- Away team detailed data: /home/axel/Code/Python/championship/goals/csv/awayScorers.csv")
 
 if __name__ == "__main__":
     main()
