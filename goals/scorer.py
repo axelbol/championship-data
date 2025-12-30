@@ -227,11 +227,11 @@ def process_team_data(url, team_type):
 
     # Define file paths based on team type
     if team_type == 'home':
-        list_players_csv = '/home/axel/Code/Python/championship/goals/csv/listHomePlayers.csv'
-        scorers_csv = '/home/axel/Code/Python/championship/goals/csv/homeScorers.csv'
+        list_players_csv = '/home/axel/Code/Python/championship/goals/csv/TESTlistHomePlayers.csv'
+        scorers_csv = '/home/axel/Code/Python/championship/goals/csv/TESThomeScorers.csv'
     else:  # away
-        list_players_csv = '/home/axel/Code/Python/championship/goals/csv/listAwayPlayers.csv'
-        scorers_csv = '/home/axel/Code/Python/championship/goals/csv/awayScorers.csv'
+        list_players_csv = '/home/axel/Code/Python/championship/goals/csv/TESTlistAwayPlayers.csv'
+        scorers_csv = '/home/axel/Code/Python/championship/goals/csv/TESTawayScorers.csv'
 
     print(f"Step 1: Scraping {team_type} team goal scorers")
     print("-" * 30)
