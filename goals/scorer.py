@@ -231,7 +231,7 @@ def process_team_data(url, team_type):
         scorers_csv = '/home/axel/Code/Python/championship/goals/csv/TESThomeScorers.csv'
     else:  # away
         list_players_csv = '/home/axel/Code/Python/championship/goals/csv/TESTlistAwayPlayers.csv'
-        scorers_csv = '/home/axel/Code/Python/championship/goals/csv/TESTawayScorers.csv'
+        scorers_csv = '/home/axel/Code/Python/championship/goals/csv/TESTNEWawayScorers.csv'
 
     print(f"Step 1: Scraping {team_type} team goal scorers")
     print("-" * 30)
